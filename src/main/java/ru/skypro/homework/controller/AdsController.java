@@ -7,7 +7,7 @@ import ru.skypro.homework.dto.ResponseWrapperAdsTo;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
 
-
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 
