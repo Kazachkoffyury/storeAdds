@@ -2,13 +2,16 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.Positive;
+
 @Data
-public class AdsTo {
+public class AdsDto {
     private int author;
-    private String image;
     private int pk;
+    @Positive
     private int price;
     private String title;
+    private String description;
 
 
 }
