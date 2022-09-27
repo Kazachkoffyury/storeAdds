@@ -11,6 +11,7 @@ import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.CommentService;
 
+import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -38,8 +39,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public AdsCommentDto getAdsComment(Integer adsId, Integer id) {
-        return null;
+    public AdsCommentDto getAdsComment(Integer id) {
+        Comment comment = commentRepository.findById(id).orElseThrow(NotFoundExeption::new);
+        AdsCommentDto adsCommentDto = commentMapper.commentEntityToAdsCommentDto(comment);
+        return adsCommentDto;
     }
 
     @Override
@@ -52,12 +55,19 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteAdsComment(Integer adsId, Integer id, String username) {
+    public void deleteAdsComment(Integer adsPk) {
+        Comment comment = commentRepository.findById(adsPk).orElseThrow(NotFoundExeption::new);
+        commentRepository.delete(comment);
 
     }
 
     @Override
-    public AdsCommentDto updateAdsComment(Integer adsId, Integer id, AdsCommentDto adsCommentDto, String username) {
-        return null;
+    public AdsCommentDto updateAdsComment(Integer id, AdsCommentDto adsCommentDto) {
+
+        Comment comment = commentRepository.findById(id).orElseThrow(NotFoundExeption::new);
+        comment.setCreatedAt(adsCommentDto.getCreatedAt());
+        comment.setText(adsCommentDto.getText());
+        commentRepository.save(comment);
+        return adsCommentDto;
     }
 }

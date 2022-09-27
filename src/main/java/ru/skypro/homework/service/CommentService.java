@@ -6,11 +6,11 @@ import ru.skypro.homework.dto.ResponseWrapperAdsCommentDto;
 public interface CommentService {
     AdsCommentDto createComment(Integer adsId, AdsCommentDto adsCommentDto);
 
-    AdsCommentDto getAdsComment(Integer adsId, Integer id);
+    AdsCommentDto getAdsComment(Integer id);
 
     ResponseWrapperAdsCommentDto getAdsAllComments(Integer adsId);
 
-    void deleteAdsComment(Integer adsId, Integer id, String username);
+    void deleteAdsComment(Integer adsId);
 
-    AdsCommentDto updateAdsComment(Integer adsId, Integer id, AdsCommentDto adsCommentDto, String username);
+    AdsCommentDto updateAdsComment(Integer id, AdsCommentDto adsCommentDto);
 }

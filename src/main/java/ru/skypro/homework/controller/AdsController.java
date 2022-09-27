@@ -67,21 +67,27 @@ private final CommentService commentService;
         }
         return ResponseEntity.ok(adsComment);
     }
-    //TODO!!!!!
 
-    @DeleteMapping("/comment")
-    public ResponseEntity<String> deleteAdsComment () {
-        return  new ResponseEntity<>("комментарий к товару удален", HttpStatus.OK);
+
+    @DeleteMapping("/comment{id}")
+    public ResponseEntity<String> deleteAdsComment (@PathVariable("id") String id) {
+
+        int adsPk = Integer.parseInt(id);
+        commentService.deleteAdsComment(adsPk);
+        return  ResponseEntity.ok().build();
     }
-    //TODO!!!!!
+
+
     @GetMapping("/comment{id}")
-    public  ResponseEntity<String> getAdsComment(@PathVariable int id) {
-        return  new ResponseEntity<>("показан комментарий № {id} к товару", HttpStatus.OK);
+    public  ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable int id) {
+
+        return   ResponseEntity.ok(commentService.getAdsComment(id));
     }
-    //TODO!!!!!
+
     @PutMapping("/comment{id}")
-    public  ResponseEntity<String> updateAdsComment(@PathVariable int id) {
-        return  new ResponseEntity<>("изменен комментарий № {id} к товару", HttpStatus.OK);
+    public  ResponseEntity<AdsCommentDto> updateAdsComment(@PathVariable int id,@RequestBody AdsCommentDto adsCommentDto) {
+        commentService.updateAdsComment(id, adsCommentDto);
+        return   ResponseEntity.ok(adsCommentDto);
     }
 
     /** Метод по удаленияю объявления по id

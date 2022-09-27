@@ -19,7 +19,7 @@ public class Ads {
     private Integer price;
     private String title;
 
-    @Lob
+
 
     private String description;
 
