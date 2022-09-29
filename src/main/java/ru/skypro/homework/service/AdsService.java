@@ -15,7 +15,8 @@ public interface AdsService {
     AdsDto createAds(CreateAdsDto createAdsDto);
     void removeAds(Integer id);
     AdsDto updateAds(Integer id, AdsDto adsDto);
-    Ads findAds(int search);
+    Ads getAds(int search);
+    ResponseWrapperAdsDto findAds( String search);
     ResponseWrapperAdsDto getAdsMe(String name);
 
 }

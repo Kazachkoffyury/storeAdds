@@ -32,6 +32,15 @@ private final CommentService commentService;
         return ResponseEntity.ok(adsService.getAllAds());
     }
 
+    /** поиск обьявления
+     *
+     * @param search
+     * @return
+     */
+    @GetMapping(params = {"search"})
+    public ResponseEntity<ResponseWrapperAdsDto> findAds(@RequestParam(required = false)String search) {
+      return ResponseEntity.ok(adsService.findAds(search));
+    }
     /** создание объявления
      *
      * @param ads
@@ -108,7 +117,7 @@ private final CommentService commentService;
      */
     @GetMapping("/{id}")
     public  ResponseEntity<Ads> getAds(@PathVariable int id) {
-        Ads ads = adsService.findAds(id);
+        Ads ads = adsService.getAds(id);
         if (ads == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
