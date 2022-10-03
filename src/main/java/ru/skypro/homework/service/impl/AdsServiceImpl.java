@@ -10,6 +10,7 @@ import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.AdsService;
 
+import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -66,9 +67,20 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ads findAds(int id) {
+    public Ads getAds(int id) {
       Ads ads = adsRepository.findById(id).orElseThrow(NotFoundExeption::new);
         return  ads;
+    }
+
+
+    @Override
+    public ResponseWrapperAdsDto findAds(String search) {
+
+        List<AdsDto> adsSearch = adsMapper.adsEntitiesToAdsDto(adsRepository.findAllByTitleContainsIgnoreCase(search));
+        ResponseWrapperAdsDto responseWrapperAdsDto =  new ResponseWrapperAdsDto();
+        responseWrapperAdsDto.setCount(adsSearch.size());
+        responseWrapperAdsDto.setResults(adsSearch);
+        return responseWrapperAdsDto;
     }
 
 

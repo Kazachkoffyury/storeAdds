@@ -28,6 +28,6 @@ public interface AdsMapper {
     @Mapping(source = "id", target = "pk")
     FullAdsDto adsEntityToFullAdsDto(Ads ads);
 
-    List<AdsDto> adsEntitiesToAdsDto(List<Ads> advertList);
+    List<AdsDto> adsEntitiesToAdsDto(List<Ads> adsList);
 
 }
