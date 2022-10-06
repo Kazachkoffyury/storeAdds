@@ -8,7 +8,9 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.exception.NoAccessException;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.UserService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -17,8 +19,11 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder encoder;
 
-    public AuthServiceImpl(UserDetailsManager manager) {
+    private final UserService userService;
+
+    public AuthServiceImpl(UserDetailsManager manager, UserService userService) {
         this.manager = manager;
+        this.userService = userService;
         this.encoder = new BCryptPasswordEncoder();
     }
 
@@ -46,5 +51,17 @@ public class AuthServiceImpl implements AuthService {
                         .build()
         );
         return true;
+    }
+
+    @Override
+    public void changePassword(String username, String currentPassword, String newPassword) {
+        UserDetails currentUserDetails = manager.loadUserByUsername(username);
+        String encryptedPassword = currentUserDetails.getPassword();
+        String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(8);
+        if (encoder.matches(currentPassword, encryptedPasswordWithoutEncryptionType)) {
+            userService.savePassword(username, "{bcrypt}" + encoder.encode(newPassword));
+        } else {
+            throw new NoAccessException();
+        }
     }
 }
