@@ -1,8 +1,10 @@
-package ru.skypro.homework.exception;
+package ru.skypro.homework.exeption;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class UserNotFoundException extends RuntimeException{
+public class NotFoundExeption extends RuntimeException{
 }
+
+

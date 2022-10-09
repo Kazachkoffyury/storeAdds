@@ -6,5 +6,4 @@ import ru.skypro.homework.dto.Role;
 public interface AuthService {
     boolean login(String userName, String password);
     boolean register(RegisterReqDto registerReq, Role role);
-    void changePassword(String username, String currentPassword, String newPassword);
 }

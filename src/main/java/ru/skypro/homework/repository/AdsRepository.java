@@ -10,6 +10,4 @@ import java.util.List;
 public interface AdsRepository extends JpaRepository<Ads,Integer> {
 
     List<Ads> findAllByTitleContainsIgnoreCase(String search);
-
-    List<Ads> findAllByUserId(int id);
 }
