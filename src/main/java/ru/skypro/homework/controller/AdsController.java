@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import com.sun.istack.NotNull;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.service.AdsService;
@@ -60,10 +62,11 @@ public class AdsController {
     )
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @PostMapping()
-    public ResponseEntity<AdsDto> createAds(@RequestPart("properties") @Valid CreateAdsDto ads) {
+    public ResponseEntity<AdsDto> createAds(@RequestPart("properties") @Valid CreateAdsDto ads,
+                                            @RequestPart("image") @Valid @NotNull MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.ok(adsService.createAds(ads,authentication));
+        return ResponseEntity.ok(adsService.createAds(ads, authentication, file));
     }
 
 
@@ -153,10 +156,11 @@ public class AdsController {
      */
     @PatchMapping("/{id}")
     public  ResponseEntity<AdsDto> updateAds(@PathVariable int id,
-                                             @RequestPart("properties") @Valid AdsDto adsDto) {
+                                             @RequestPart("properties") @Valid AdsDto adsDto,
+                                             @RequestPart("image") @Valid @NotNull MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return ResponseEntity.ok(adsService.updateAds(id, adsDto, authentication.getName(), userDetails));
+        return ResponseEntity.ok(adsService.updateAds(id, adsDto, authentication.getName(), userDetails,file));
     }
 
 

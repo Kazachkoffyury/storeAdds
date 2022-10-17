@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 
 
@@ -17,6 +18,7 @@ import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.ImageService;
 
 import java.util.List;
 
@@ -27,12 +29,14 @@ public class AdsServiceImpl implements AdsService {
     private final AdsMapper adsMapper;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final ImageService imageService;
 
-    public AdsServiceImpl(AdsRepository adsRepository, AdsMapper adsMapper, CommentRepository commentRepository, UserRepository userRepository) {
+    public AdsServiceImpl(AdsRepository adsRepository, AdsMapper adsMapper, CommentRepository commentRepository, UserRepository userRepository, ImageService imageService) {
         this.adsRepository = adsRepository;
         this.adsMapper = adsMapper;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
+        this.imageService = imageService;
     }
 
     /**
@@ -56,9 +60,10 @@ public class AdsServiceImpl implements AdsService {
      * @return
      */
     @Override
-    public AdsDto createAds(CreateAdsDto createAdsDto, Authentication authentication) {
+    public AdsDto createAds(CreateAdsDto createAdsDto, Authentication authentication, MultipartFile file) {
         Ads createdAds = adsMapper.createAdsToAdsToEntity(createAdsDto);
         createdAds.setUser(userRepository.findUserByUserName(authentication.getName()).orElseThrow(UserNotFoundException::new));
+        createdAds.setImage("/api/" + imageService.saveImage(file) + "/image");
         adsRepository.save(createdAds);
         return adsMapper.adsEntityToAdsTo(createdAds);
     }
@@ -91,7 +96,7 @@ public class AdsServiceImpl implements AdsService {
      * @return
      */
     @Override
-    public AdsDto updateAds(Integer id, AdsDto adsDto, String username, UserDetails userDetails) {
+    public AdsDto updateAds(Integer id, AdsDto adsDto, String username, UserDetails userDetails,MultipartFile file) {
         Ads ads = adsRepository.findById(id).orElseThrow(NotFoundException::new);
 
         if (userDetails.getAuthorities().toString().contains("ROLE_ADMIN")
@@ -99,6 +104,7 @@ public class AdsServiceImpl implements AdsService {
             ads.setPrice(adsDto.getPrice());
             ads.setTitle(adsDto.getTitle());
             ads.setDescription(adsDto.getDescription());
+            ads.setImage("/api/" + imageService.saveImage(file) + "/image");
             adsRepository.save(ads);
             return adsMapper.adsEntityToAdsTo(ads);
         } else {
