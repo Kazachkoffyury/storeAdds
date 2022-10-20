@@ -1,5 +1,6 @@
 package ru.skypro.homework.model;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,30 +11,16 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@Data
 public class Image {
     @Id
     @Column(name = "id", unique = true)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private Integer fileSize;
     private String mediaType;
+
     @Lob
     private byte[] data;
 
-    @OneToOne
-    private Image image;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Image image = (Image) o;
-        return Objects.equals(id, image.id) && Objects.equals(fileSize, image.fileSize) && Objects.equals(mediaType, image.mediaType) && Arrays.equals(data, image.data);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(id, fileSize, mediaType);
-        result = 31 * result + Arrays.hashCode(data);
-        return result;
-    }
 }

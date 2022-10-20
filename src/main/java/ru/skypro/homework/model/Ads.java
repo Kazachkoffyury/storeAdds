@@ -19,8 +19,8 @@ public class Ads {
     private Integer price;
     private String title;
 
-
-
+    @Lob
+    private String image;
     private String description;
 
     @ManyToOne
@@ -29,6 +29,5 @@ public class Ads {
     @OneToMany
     private List<Comment> commentList;
 
-    @OneToOne
-    private Image image;
+
 }
